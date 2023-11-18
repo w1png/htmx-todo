@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/w1png/htmx/config"
 	"github.com/w1png/htmx/handlers"
 )
@@ -33,6 +34,8 @@ func (s *HttpServer) GatherRoutes() {
 	})
 
 	s.echo.POST("/create", handlers.CreateTodoHandler)
+
+	s.echo.Use(middleware.Logger())
 }
 
 func (s *HttpServer) Run() error {
