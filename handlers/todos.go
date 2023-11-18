@@ -11,7 +11,7 @@ import (
 )
 
 func sendTodos(c echo.Context) error {
-	tmpl := template.Must(template.ParseFiles("public/templates/index.html"))
+	tmpl := template.Must(template.ParseFiles("templates/index.html"))
 
 	todos, err := storage.StorageInstance.GetTodos()
 	if err != nil {
@@ -27,7 +27,7 @@ func sendTodos(c echo.Context) error {
 }
 
 func IndexHandler(c echo.Context) error {
-	tmpl := template.Must(template.ParseFiles("public/templates/index.html"))
+	tmpl := template.Must(template.ParseFiles("templates/index.html"))
 
 	todos, err := storage.StorageInstance.GetTodos()
 	if err != nil {

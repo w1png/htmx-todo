@@ -5,25 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>HTMX Todo website</title>
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="icon" href="../icon.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="./public/style.css" />
+    <link rel="icon" href="./public/icon.svg" type="image/x-icon" />
     <script
       src="https://unpkg.com/htmx.org@1.9.8"
       integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            transitionProperty: {
-              height: "height",
-            },
-          },
-        },
-      };
-
       function minimize() {
         let todoWindow = document.getElementById("todoWindow");
 

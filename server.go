@@ -33,8 +33,9 @@ func (s *HttpServer) GatherRoutes() {
 		return c.String(http.StatusOK, "OK")
 	})
 
-	s.echo.POST("/create", handlers.CreateTodoHandler)
+	s.echo.Static("/public", "public")
 
+	s.echo.POST("/create", handlers.CreateTodoHandler)
 	s.echo.Use(middleware.Logger())
 }
 
