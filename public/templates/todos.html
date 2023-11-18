@@ -1,9 +1,0 @@
-{{ range . }}
-<div
-  class="w-full h-12 rounded-xl bg-[#C7CDDA] flex items-center justify-center"
->
-  <p class="text-center text-xl font-bold {{if .Completed}}line-through{{end}}">
-    {{.Objective}}
-  </p>
-</div>
-{{ end }}
