@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>HTMX Todo website</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="../icon.svg" type="image/x-icon" />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.8"
+      integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            transitionProperty: {
+              height: "height",
+            },
+          },
+        },
+      };
+
+      function minimize() {
+        let todoWindow = document.getElementById("todoWindow");
+
+        ["w-full", "md:w-1/2", "lg:w-1/3"].forEach((className) => {
+          todoWindow.classList.remove(className);
+        });
+
+        ["w-0", "opacity-0"].forEach((className) => {
+          todoWindow.classList.add(className);
+        });
+
+        document.getElementById("windowControls").classList.add("opacity-0");
+
+        setTimeout(() => {
+          todoWindow.classList.add("hidden");
+        }, 300);
+      }
+
+      let isMaximized = false;
+
+      function toggleMaximize() {
+        let minimized = ["min-h-[50vh]", "w-full", "md:w-1/2", "lg:w-1/3"];
+        let maximized = ["w-[80vw]", "min-h-[80vh]", "container", "mx-auto"];
+        let todoWindow = document.getElementById("todoWindow");
+
+        if (isMaximized) {
+          maximized.forEach((className) => {
+            todoWindow.classList.remove(className);
+          });
+
+          minimized.forEach((className) => {
+            todoWindow.classList.add(className);
+          });
+          isMaximized = false;
+        } else {
+          minimized.forEach((className) => {
+            todoWindow.classList.remove(className);
+          });
+
+          maximized.forEach((className) => {
+            todoWindow.classList.add(className);
+          });
+          isMaximized = true;
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="w-screen min-h-screen bg-[#E5E9F0] text-[#3B4252] flex flex-col items-center justify-center p-10"
+    >
+      <div class="absolute top-1/3 left-1/3">
+        <pre>
+        ----/\_____/\
+        ---/--o---o--\
+        --(-==--^--==-)
+        ---)---------(
+        --(-----------)
+        -(-(--)---(--)-)
+        (__(__)___(__)__)
+      </pre
+        >
+      </div>
+      <div
+        class="relative w-full md:w-1/2 lg:w-1/3 mx-auto flex flex-col justify-center items-center bg-[#D8DEE9] shadow-md min-h-[50vh] py-10 px-6 rounded-lg transition-all duration-300 ease-in-out"
+        id="todoWindow"
+      >
+        <div
+          class="absolute top-4 left-6 flex flex-row gap-1 transition-all duration-100 ease-in-out"
+          id="windowControls"
+        >
+          <button
+            class="aspect-square h-3 bg-red-500 rounded-full"
+            onclick="window.close()"
+          ></button>
+          <button
+            class="aspect-square h-3 bg-yellow-500 rounded-full"
+            onclick="minimize()"
+          ></button>
+          <button
+            class="aspect-square h-3 bg-green-500 rounded-full"
+            onclick="toggleMaximize()"
+          ></button>
+        </div>
+
+        <div
+          class="w-full h-full flex flex-col gap-8 max-w-[760px]"
+          id="todoList"
+        >
+          <form
+            class="flex flex-col gap-2 w-full h-fit"
+            hx-on::after-request="this.reset()"
+          >
+            <input
+              class="h-10 px-4 rounded-xl"
+              type="text"
+              placeholder="Pick up groceries"
+              name="objective"
+            />
+            <button
+              class="h-10 px-4 bg-[#C7CDDA] rounded-xl text-[#3B4252]"
+              hx-post="/create"
+              hx-target="#todos"
+              hx-swap="innerHTML"
+            >
+              Add
+            </button>
+          </form>
+
+          <div class="grow flex flex-col gap-2" id="todos">
+            {{ block "Todos" . }} {{ range . }}
+            <div
+              class="relative w-full h-12 rounded-xl bg-[#C7CDDA] flex flex-row items-center justify-center px-5"
+            >
+              <button
+                class="text-center text-xl font-bold {{if .Completed}}line-through{{end}} grow"
+                hx-put="/todo/{{.ID}}"
+                hx-target="#todos"
+                hx-swap="innerHTML"
+              >
+                {{.Objective}}
+              </button>
+              <button
+                class="absolute right-4 aspect-square h-2/3 flex items-center justify-center hover:text-[#898D97] text-[#3B4252] font-bold"
+                hx-delete=" /todo/{{.ID}}"
+                hx-target="#todos"
+                hx-swap="innerHTML"
+              >
+                X
+              </button>
+            </div>
+            {{end}} {{ end }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
